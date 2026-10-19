@@ -1,0 +1,54 @@
+facility: Facility-Stale-Evidence
+standard: IEC 62443
+zones:
+  - zone_id: Z1
+    name: Cell Zone
+    purdue_level: 2
+assets:
+  - asset_id: AST-01
+    name: Controller-1
+    zone_id: Z1
+    criticality: high
+    patch_status: unpatchable
+controls:
+  - control_id: CTRL-01
+    name: Compensating Rule
+    asset_id: AST-01
+    control_type: firewall
+    description: Port restrictions
+    owner: SecOps
+    implemented_at: "2026-01-01T00:00:00Z"
+    expires_at: "2027-01-01T00:00:00Z"
+    status: active
+    evidence_ids:
+      - EV-01
+evidence:
+  - evidence_id: EV-01
+    control_id: CTRL-01
+    evidence_type: export
+    collected_at: "2026-01-02T00:00:00Z"
+    valid_until: "2026-10-01T00:00:00Z"
+    status: current
+    source: exporter
+    sha256: 0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef
+claims:
+  - claim_id: CLM-01
+    asset_id: AST-01
+    zone_id: Z1
+    framework: IEC_62443
+    requirement_ref: SR 1.1
+    statement: Communication filtering active.
+    status: assured
+    supporting_control_ids:
+      - CTRL-01
+    supporting_evidence_ids: []
+  - claim_id: CLM-02
+    asset_id: AST-01
+    zone_id: Z1
+    framework: IEC_62443
+    requirement_ref: SR 5.1
+    statement: Network segmentation verified.
+    status: assured
+    supporting_control_ids: []
+    supporting_evidence_ids:
+      - EV-01

@@ -1,0 +1,14 @@
+{
+  "new_invalidations": 0,
+  "exit_code": 0,
+  "claims_by_status_after": {
+    "assured": 2,
+    "under_review": 0,
+    "invalidated": 0
+  },
+  "forbidden_substrings": [
+    "noncompliant",
+    "unsafe",
+    "violation"
+  ]
+}

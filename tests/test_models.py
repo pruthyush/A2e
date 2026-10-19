@@ -216,12 +216,3 @@ def test_cli_help_and_subcommands() -> None:
         sub_result = runner.invoke(app, [sub, "--help"])
         assert sub_result.exit_code == 0
 
-
-def test_cli_subcommands_exit_zero_with_stub_message() -> None:
-    """Proves that invoking stubbed CLI subcommands outputs stub message and exits 0."""
-    result = runner.invoke(
-        app,
-        ["check", "--model", "model.yaml", "--now", "2026-10-19T10:00:00Z"],
-    )
-    assert result.exit_code == 0
-    assert "Not implemented yet." in result.stdout
