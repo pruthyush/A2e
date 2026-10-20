@@ -46,6 +46,9 @@ aee review --model path/to/model.yaml --history path/to/history.jsonl --claim CL
 aee report --model path/to/model.yaml --history path/to/history.jsonl --now 2026-10-19T10:00:00Z --output path/to/report.md
 ```
 
+See [`samples/`](samples/) for a real report the CLI produced from a
+small IEC 62443 fixture — including how to reproduce it byte-for-byte.
+
 ---
 
 ## One-Command Demo

@@ -1,0 +1,179 @@
+facility: Refinery-Alpha
+standard: IEC 62443
+assets:
+- asset_id: PLC-01
+  name: Triconex Safety PLC
+  zone_id: Z-SAFETY
+  criticality: safety
+  patch_status: unpatchable
+  notes: Legacy firmware
+- asset_id: HMI-01
+  name: Operator Workstation
+  zone_id: Z-CONTROL
+  criticality: high
+  patch_status: deferred
+  notes: Vendor validated OS
+- asset_id: ENG-01
+  name: Engineering Station
+  zone_id: Z-CONTROL
+  criticality: medium
+  patch_status: patchable
+  notes: Monthly cycle
+zones:
+- zone_id: Z-SAFETY
+  name: Safety Instrument Zone
+  purdue_level: 2
+  security_level_target: 3
+- zone_id: Z-CONTROL
+  name: Basic Process Control System
+  purdue_level: 3
+  security_level_target: 2
+conduits:
+- conduit_id: CND-01
+  source_zone: Z-CONTROL
+  destination_zone: Z-SAFETY
+  allowed_protocols:
+  - modbus-tcp
+  - opc-ua
+controls:
+- control_id: CC-01
+  name: Unidirectional Security Gateway
+  asset_id: PLC-01
+  control_type: data_diode
+  description: Hardware data diode isolating PLC
+  owner: SecOps
+  implemented_at: '2026-01-01T00:00:00Z'
+  expires_at: '2027-01-01T00:00:00Z'
+  status: active
+  evidence_ids:
+  - EVD-01
+- control_id: CC-02
+  name: Host Application Whitelisting
+  asset_id: HMI-01
+  control_type: whitelisting
+  description: Execution prevention for untrusted binaries
+  owner: HostSec
+  implemented_at: '2026-01-01T00:00:00Z'
+  expires_at: '2027-01-01T00:00:00Z'
+  status: active
+  evidence_ids:
+  - EVD-02
+- control_id: CC-04
+  name: Boundary Firewall ACL
+  asset_id: PLC-01
+  control_type: firewall
+  description: Restricts engineering port access to Conduit CND-01
+  owner: NetOps
+  implemented_at: '2026-01-01T00:00:00Z'
+  expires_at: '2027-01-01T00:00:00Z'
+  status: active
+  evidence_ids:
+  - EVD-03
+  - EVD-12
+evidence:
+- evidence_id: EVD-01
+  control_id: CC-01
+  evidence_type: hardware_config
+  collected_at: '2026-01-15T00:00:00Z'
+  valid_until: '2027-01-15T00:00:00Z'
+  status: current
+  source: diode-config-export
+  sha256: a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90
+- evidence_id: EVD-02
+  control_id: CC-02
+  evidence_type: policy_export
+  collected_at: '2026-02-01T00:00:00Z'
+  valid_until: '2027-02-01T00:00:00Z'
+  status: current
+  source: applocker-export
+  sha256: b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1
+- evidence_id: EVD-03
+  control_id: CC-04
+  evidence_type: firewall_ruleset
+  collected_at: '2026-03-01T00:00:00Z'
+  valid_until: '2027-03-01T00:00:00Z'
+  status: current
+  source: fw-backup
+  sha256: c3d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2
+- evidence_id: EVD-12
+  control_id: CC-04
+  evidence_type: annual_audit_log
+  collected_at: '2026-01-01T00:00:00Z'
+  valid_until: '2026-10-01T00:00:00Z'
+  status: current
+  source: audit-system
+  sha256: d4e5f60718293a4b5c6d7e8f90a1b2c3d4e5f60718293a4b5c6d7e8f90a1b2c3
+claims:
+- claim_id: AC-01
+  asset_id: PLC-01
+  zone_id: Z-SAFETY
+  conduit_id: CND-01
+  framework: IEC_62443
+  requirement_ref: SR 5.1
+  security_level_target: 3
+  statement: Network segmentation enforced between safety and control domains.
+  status: assured
+  supporting_control_ids:
+  - CC-01
+  supporting_evidence_ids:
+  - EVD-01
+  last_reviewed_at: '2026-02-01T00:00:00Z'
+  reviewer: Auditor
+- claim_id: AC-02
+  asset_id: HMI-01
+  zone_id: Z-CONTROL
+  conduit_id: null
+  framework: IEC_62443
+  requirement_ref: CR 1.1
+  security_level_target: 2
+  statement: Human-machine interface integrity protected against unauthorized code.
+  status: assured
+  supporting_control_ids:
+  - CC-02
+  supporting_evidence_ids:
+  - EVD-02
+  last_reviewed_at: '2026-02-01T00:00:00Z'
+  reviewer: Auditor
+- claim_id: AC-03
+  asset_id: ENG-01
+  zone_id: Z-CONTROL
+  conduit_id: null
+  framework: IEC_62443
+  requirement_ref: CR 2.3
+  security_level_target: 2
+  statement: Engineering station communication channel restricted.
+  status: assured
+  supporting_control_ids: []
+  supporting_evidence_ids: []
+  last_reviewed_at: '2026-02-01T00:00:00Z'
+  reviewer: Auditor
+- claim_id: AC-04
+  asset_id: PLC-01
+  zone_id: Z-SAFETY
+  conduit_id: CND-01
+  framework: IEC_62443
+  requirement_ref: SR 3.2
+  security_level_target: 3
+  statement: Safety PLC ingress filtering active.
+  status: assured
+  supporting_control_ids:
+  - CC-01
+  supporting_evidence_ids:
+  - EVD-01
+  last_reviewed_at: '2026-02-01T00:00:00Z'
+  reviewer: Auditor
+- claim_id: AC-07
+  asset_id: PLC-01
+  zone_id: Z-SAFETY
+  conduit_id: CND-01
+  framework: IEC_62443
+  requirement_ref: SR 1.1
+  security_level_target: 3
+  statement: Boundary access protection for Safety PLC.
+  status: assured
+  supporting_control_ids:
+  - CC-04
+  supporting_evidence_ids:
+  - EVD-12
+  last_reviewed_at: '2026-02-01T00:00:00Z'
+  reviewer: Auditor
